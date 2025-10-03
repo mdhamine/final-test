@@ -1,7 +1,5 @@
 <template>
-  <section
-    class="bg-gradient-to-b from-[#1a2a6c] via-[#162245] to-[#0a0a2a] py-16 px-4"
-  >
+  <section class="bg-[#000032] py-16 px-4">
     <div class="max-w-6xl mx-auto">
       <!-- Outer Box -->
       <div class="bg-blue-900/50 backdrop-blur-md rounded-3xl shadow-xl p-10">
