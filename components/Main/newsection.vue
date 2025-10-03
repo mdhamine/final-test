@@ -1,5 +1,7 @@
 <template>
-  <section class="bg-[#0a0a2a] py-16 px-4">
+  <section
+    class="bg-gradient-to-b from-[#1a2a6c] via-[#162245] to-[#0a0a2a] py-16 px-4"
+  >
     <div class="max-w-6xl mx-auto text-center">
       <!-- Title -->
       <h2 class="text-3xl md:text-4xl font-bold text-white">
@@ -13,54 +15,76 @@
 
     <!-- Testimonials -->
     <div class="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6 max-w-6xl mx-auto">
-      <!-- Card 1 -->
-      <div class="bg-white rounded-xl shadow-md p-4 text-left">
+      <div
+        v-for="(t, i) in visibleTestimonials"
+        :key="i"
+        class="bg-white/90 backdrop-blur rounded-2xl shadow-lg p-6 text-left"
+      >
         <div class="flex items-center gap-2 mb-2">
-          <span class="font-bold">Marvin</span>
-          <span class="text-sm text-gray-500">05/05/2023 20:31</span>
-        </div>
-        <p class="text-gray-700 mb-4">
-          J’ai d’ailleurs reçu les fruits de mon travail aujourd’hui ! Je me
-          suis occupé de quasiment tout, tunnel de vente, copy, graphisme,
-          automatisations.
-        </p>
-        <div class="border rounded-md p-2 text-xs text-gray-600 bg-gray-50">
-          <strong>Fit Business LLC received $20,246.00</strong>
-        </div>
-      </div>
-
-      <!-- Card 2 -->
-      <div class="bg-white rounded-xl shadow-md p-4 text-left">
-        <div class="flex items-center gap-2 mb-2">
-          <span class="font-bold">Carlos</span>
-          <span class="text-sm text-gray-500">11/07/2023 12:27</span>
+          <span class="font-bold">{{ t.name }}</span>
+          <span class="text-sm text-gray-500">{{ t.date }}</span>
         </div>
         <p class="text-gray-700 text-sm leading-relaxed">
-          Petit témoignage de remerciement à l’équipe Business Pro. Premier mois
-          en solo CA à 6k, premier dans une équipe à 25k ^^. J’ai suivi cette
-          formation pour aider ma start-up à décoller, mais elle m’a fait
-          réaliser que ma véritable passion était d’aider les projets à démarrer
-          rapidement…
-        </p>
-      </div>
-
-      <!-- Card 3 -->
-      <div class="bg-white rounded-xl shadow-md p-4 text-left">
-        <div class="flex items-center gap-2 mb-2">
-          <span class="font-bold">jules88</span>
-          <span class="text-sm text-gray-500">08/08/2023 15:56</span>
-        </div>
-        <p class="text-gray-700 text-sm leading-relaxed">
-          En 15 ans, je n’ai pas touché un seul euro, mais aujourd’hui ça y est.
-          C’est la preuve que cette formation peut tout changer 💪. Avant je ne
-          savais pas trop où j’allais, et j’ai essayé de trouver le MEILLEUR
-          business à lancer…
+          {{ t.text }}
         </p>
       </div>
     </div>
+
+    <!-- Button -->
+    <div class="flex justify-center mt-12">
+      <button
+        @click="showAll = !showAll"
+        class="bg-gradient-to-r from-blue-500 to-indigo-600 hover:opacity-90 transition text-white font-medium py-3 px-6 rounded-full shadow-lg"
+      >
+        {{
+          showAll
+            ? "Afficher moins de témoignages"
+            : "Afficher plus de témoignages"
+        }}
+      </button>
+    </div>
+
+    <!-- Disclaimer -->
+    <p class="text-center text-gray-300 mt-8">
+      Tous ces résultats ne sont pas des promesses de gains
+    </p>
   </section>
 </template>
 
 <script setup>
-// Nothing needed here, static content
+import { ref, computed } from "vue";
+
+const testimonials = ref([
+  {
+    name: "Marvin",
+    date: "05/05/2023 20:31",
+    text: "J’ai d’ailleurs reçu les fruits de mon travail aujourd’hui ! Tunnel de vente, copy, graphisme, automatisations.",
+  },
+  {
+    name: "Carlos",
+    date: "11/07/2023 12:27",
+    text: "Petit témoignage de remerciement à l’équipe Business Pro. Premier mois en solo CA à 6k, premier dans une équipe à 25k.",
+  },
+  {
+    name: "jules88",
+    date: "08/08/2023 15:56",
+    text: "En 15 ans, je n’ai pas touché un seul euro, mais aujourd’hui ça y est. Preuve que cette formation peut tout changer 💪.",
+  },
+  {
+    name: "Geoffrey",
+    date: "20:04",
+    text: "Avant tout, MERCI ANAS ! Formation incroyable avec des résultats concrets.",
+  },
+  {
+    name: "fabris04",
+    date: "26/05/2023 21:16",
+    text: "Merci à toute l’équipe Mindeo pour ce monument pédagogique.",
+  },
+]);
+
+const showAll = ref(false);
+
+const visibleTestimonials = computed(() => {
+  return showAll.value ? testimonials.value : testimonials.value.slice(0, 3);
+});
 </script>
