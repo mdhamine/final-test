@@ -11,6 +11,7 @@ import { MainTraining } from '#build/components'; import { MainNextlvl } from
     <LazyMainFeat />
     <LazyMainFAQs />
     <LazyMainNewsection />
+    <LazyMainNewsection2 />
     <LazyMainFooter />
   </main>
 </template>
