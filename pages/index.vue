@@ -8,10 +8,10 @@ import { MainTraining } from '#build/components'; import { MainNextlvl } from
     <LazyMainNextlvl />
 
     <LazyMainTraining />
-    <LazyMainFeat />
-    <LazyMainFAQs />
+
     <LazyMainNewsection />
     <LazyMainNewsection2 />
+    <LazyMainFAQs />
     <LazyMainFooter />
   </main>
 </template>
