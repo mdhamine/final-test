@@ -1,52 +1,50 @@
 <template>
   <section class="bg-[#f7faff] py-16 text-center">
-    <p class="text-gray-600 mb-2">Toujours hésitant ?</p>
     <h2 class="text-3xl md:text-4xl font-bold mb-6">
-      Découvrez nos contenus <span class="text-blue-500">gratuits</span>
+      🎙️ Discover <span class="text-blue-500">FluentlyTalk</span> Episodes
     </h2>
     <p class="max-w-3xl mx-auto text-gray-500 mb-12">
-      Nos mini formations et podcasts gratuits vous aideront à développer des
-      fondations solides dans le développement personnel, le business en ligne
-      et l’entrepreneuriat.
+      Inspiring conversations with Algerian entrepreneurs, creators, and
+      dreamers sharing their journeys, lessons, and mindsets for success.
     </p>
 
     <div class="relative w-full max-w-6xl mx-auto">
       <!-- Left arrow -->
       <button
-        @click="prevSlide"
+        @click="prev"
         class="absolute left-0 top-1/2 -translate-y-1/2 bg-white shadow rounded-full w-10 h-10 flex items-center justify-center hover:bg-blue-100 z-10"
       >
         <span class="text-xl">‹</span>
       </button>
 
-      <!-- Cards container -->
+      <!-- Slider -->
       <div class="overflow-hidden">
         <div
-          class="flex transition-transform duration-500 ease-in-out"
-          :style="{
-            transform: `translateX(-${currentIndex * (100 / visibleCards)}%)`,
-          }"
+          class="flex transition-transform duration-700 ease-in-out"
+          :style="{ transform: `translateX(-${currentIndex * 100}%)` }"
         >
           <div
-            v-for="(card, index) in extendedCards"
+            v-for="(video, index) in videos"
             :key="index"
-            class="min-w-[33.33%] px-4"
+            class="min-w-full md:min-w-[33.33%] px-4"
           >
             <div
-              class="bg-white shadow-lg rounded-2xl p-6 text-left transition-all duration-300 hover:shadow-blue-300 hover:shadow-xl hover:border hover:border-blue-400 h-[480px] flex flex-col"
+              class="bg-white shadow-lg rounded-2xl p-6 text-left h-[420px] hover:border-2 hover:border-blue-400 transition-all duration-300"
             >
               <img
-                :src="card.image"
+                :src="video.thumbnail"
+                :alt="video.title"
                 class="rounded-xl mb-4 w-full h-48 object-cover"
-                alt=""
               />
-              <h3 class="text-xl font-bold mb-2">{{ card.title }}</h3>
-              <p class="text-gray-500 flex-grow">{{ card.desc }}</p>
-              <button
-                class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-full mt-6 transition"
+              <h3 class="text-xl font-bold mb-2">{{ video.title }}</h3>
+              <p class="text-gray-500 mb-6">{{ video.desc }}</p>
+              <a
+                :href="video.link"
+                target="_blank"
+                class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-full transition"
               >
-                Voir la formation gratuite
-              </button>
+                Watch on YouTube
+              </a>
             </div>
           </div>
         </div>
@@ -54,7 +52,7 @@
 
       <!-- Right arrow -->
       <button
-        @click="nextSlide"
+        @click="next"
         class="absolute right-0 top-1/2 -translate-y-1/2 bg-white shadow rounded-full w-10 h-10 flex items-center justify-center hover:bg-blue-100 z-10"
       >
         <span class="text-xl">›</span>
@@ -63,92 +61,70 @@
   </section>
 </template>
 
-<script setup>
-import { ref, computed, onMounted } from "vue";
+<script setup lang="ts">
+import { ref } from "vue";
 
-const visibleCards = 3; // number of visible cards
-const currentIndex = ref(visibleCards); // start from the first real slide
-
-const cards = ref([
+const videos = ref([
   {
-    title: "Podcast avec Omar Rahmoun",
-    image:
-      "https://i.ibb.co/TMWd0BMz/OPTIMIZED-2-MB-Podcast-Omar-rahmoun-2.png",
-    desc: "Découvrez le parcours inspirant d’Omar Rahmoun et ses conseils pour réussir dans le business moderne.",
+    title: "FluentlyTalk Ep 01 — Omar Rahmoun",
+    desc: "Why Omar wakes up at 4 AM to chase his dreams — a talk about discipline and mindset.",
+    thumbnail: "https://i.ytimg.com/vi/BaUdOKGuA40/maxresdefault.jpg",
+    link: "https://www.youtube.com/watch?v=BaUdOKGuA40",
   },
   {
-    title: "Podcast Épisode 2",
-    image: "https://i.ibb.co/k2jkbJj2/Optimized-2mb-Podcast-EP-2.png",
-    desc: "Un nouvel épisode dédié aux stratégies de réussite et à la motivation personnelle.",
+    title: "FluentlyTalk Ep 02 — Oussama Hamouche",
+    desc: "An Algerian millionaire shares how he built his business empire from the ground up.",
+    thumbnail: "https://i.ytimg.com/vi/X8OqdwWqWso/maxresdefault.jpg",
+    link: "https://www.youtube.com/watch?v=X8OqdwWqWso",
   },
   {
-    title: "Podcast Épisode 2 (Version Optimisée)",
-    image: "https://i.ibb.co/s71YvYd/ep-2-opt.png",
-    desc: "Apprenez comment surmonter les blocages mentaux pour atteindre vos objectifs.",
+    title: "FluentlyTalk Ep 03 — Idris Smati",
+    desc: "Why Idris left university to work in Qatar and how that decision changed his life.",
+    thumbnail: "https://i.ytimg.com/vi/1T68O4Jzfv4/maxresdefault.jpg",
+    link: "https://www.youtube.com/watch?v=1T68O4Jzfv4",
   },
   {
-    title: "Podcast Épisode 3",
-    image: "https://i.ibb.co/670NwHSy/EP-3-OPT.png",
-    desc: "Explorez les secrets de la persévérance et de la discipline dans cet épisode inspirant.",
+    title: "FluentlyTalk Ep 04 — Yassine Abdeldjebbar",
+    desc: "From Algeria to the U.S.: Yassine’s inspiring journey to becoming a researcher abroad.",
+    thumbnail: "https://i.ytimg.com/vi/sSCa9LimxzQ/maxresdefault.jpg",
+    link: "https://www.youtube.com/watch?v=sSCa9LimxzQ",
   },
   {
-    title: "Podcast Épisode 4",
-    image: "https://i.ibb.co/tMZjb4Nj/EP-4-Version-2-1.png",
-    desc: "Les erreurs à éviter lorsqu’on démarre son propre projet entrepreneurial.",
+    title: "FluentlyTalk Ep 05 — ROC DZ",
+    desc: "Is it really possible to start from zero in Algeria? ROC DZ gives his raw perspective.",
+    thumbnail: "https://i.ytimg.com/vi/iv66rGFWMmI/maxresdefault.jpg",
+    link: "https://www.youtube.com/watch?v=iv66rGFWMmI",
   },
   {
-    title: "Podcast Épisode 5",
-    image: "https://i.ibb.co/Ndmw1p8S/EP-5-Youtube-OPT-3.png",
-    desc: "Découvrez comment bâtir une présence forte en ligne grâce au contenu vidéo.",
+    title: "FluentlyTalk Ep 06 — Belkadi Manel",
+    desc: "How Manel scored 18+ in the Algerian Baccalaureate — strategies for excellence.",
+    thumbnail: "https://i.ytimg.com/vi/8asdkghlcpA/maxresdefault.jpg",
+    link: "https://www.youtube.com/watch?v=8asdkghlcpA",
   },
   {
-    title: "Podcast avec Idriss",
-    image: "https://i.ibb.co/tp3zPLpD/OPT-Podcast-idriss2-1.png",
-    desc: "Une conversation exclusive sur la réussite personnelle et la gestion du temps.",
+    title: "FluentlyTalk Ep 07 — Ladjali Raouf",
+    desc: "Has medicine become a business in Algeria? Raouf shares his honest opinion.",
+    thumbnail: "https://i.ytimg.com/vi/35Tjrg4KJYc/maxresdefault.jpg",
+    link: "https://www.youtube.com/watch?v=35Tjrg4KJYc",
   },
   {
-    title: "Podcast Spécial Motivation",
-    image: "https://i.ibb.co/WNMnnVdn/POD-OPT.png",
-    desc: "Un épisode pour booster votre énergie et retrouver la motivation au quotidien.",
+    title: "FluentlyTalk Ep 08 — Ahmed Bouzid",
+    desc: "Ahmed Bouzid reveals how he asked for 6 billion centimes to start his project.",
+    thumbnail: "https://i.ytimg.com/vi/2uq8LwmDQ6Q/maxresdefault.jpg",
+    link: "https://www.youtube.com/watch?v=2uq8LwmDQ6Q",
   },
 ]);
 
-// Duplicate first & last slides for smooth infinite loop
-const extendedCards = computed(() => {
-  const start = cards.value.slice(-visibleCards);
-  const end = cards.value.slice(0, visibleCards);
-  return [...start, ...cards.value, ...end];
-});
+const currentIndex = ref(0);
 
-let isTransitioning = false;
-
-function nextSlide() {
-  if (isTransitioning) return;
-  isTransitioning = true;
-  currentIndex.value++;
-  setTimeout(() => {
-    if (currentIndex.value >= cards.value.length + visibleCards) {
-      currentIndex.value = visibleCards;
-    }
-    isTransitioning = false;
-  }, 500); // match duration-500
+function next() {
+  currentIndex.value = (currentIndex.value + 1) % videos.value.length;
 }
 
-function prevSlide() {
-  if (isTransitioning) return;
-  isTransitioning = true;
-  currentIndex.value--;
-  setTimeout(() => {
-    if (currentIndex.value < visibleCards) {
-      currentIndex.value = cards.value.length + visibleCards - 1;
-    }
-    isTransitioning = false;
-  }, 500);
+function prev() {
+  currentIndex.value =
+    (currentIndex.value - 1 + videos.value.length) % videos.value.length;
 }
-
-onMounted(() => {
-  currentIndex.value = visibleCards;
-});
 </script>
 
 <style scoped>
