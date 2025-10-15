@@ -1,8 +1,9 @@
 <template>
-  <section class="bg-[#f7faff] py-16 text-center">
+  <section class="bg-[#f7faff] py-16 text-center overflow-hidden">
     <h2 class="text-3xl md:text-4xl font-bold mb-6">
       🎙️ Discover <span class="text-blue-500">FluentlyTalk</span> Episodes
     </h2>
+
     <p class="max-w-3xl mx-auto text-gray-500 mb-12 leading-relaxed">
       Toujours hésitant ? <br />
       Découvrez nos contenus gratuits. <br />
@@ -17,12 +18,13 @@
         @click="prev"
         class="absolute left-0 top-1/2 -translate-y-1/2 bg-white shadow rounded-full w-10 h-10 flex items-center justify-center hover:bg-blue-100 z-10"
       >
-        <span class="text-xl">‹</span>
+        ‹
       </button>
 
       <!-- Slider -->
       <div class="overflow-hidden">
         <div
+          ref="track"
           class="flex transition-transform duration-700 ease-in-out"
           :style="{
             transform: `translateX(-${currentIndex * (100 / visibleCards)}%)`,
@@ -42,10 +44,10 @@
                   :alt="video.title"
                   class="rounded-xl mb-4 w-full h-48 object-cover"
                 />
-                <h3 class="text-xl font-bold mb-2 line-clamp-2">
-                  {{ video.title }}
-                </h3>
-                <p class="text-gray-500 mb-4 line-clamp-3">{{ video.desc }}</p>
+                <h3 class="text-xl font-bold mb-2">{{ video.title }}</h3>
+                <p class="text-gray-500 mb-4 line-clamp-3">
+                  {{ video.desc }}
+                </p>
               </div>
               <a
                 :href="video.link"
@@ -64,14 +66,14 @@
         @click="next"
         class="absolute right-0 top-1/2 -translate-y-1/2 bg-white shadow rounded-full w-10 h-10 flex items-center justify-center hover:bg-blue-100 z-10"
       >
-        <span class="text-xl">›</span>
+        ›
       </button>
     </div>
   </section>
 </template>
 
 <script setup lang="ts">
-import { ref, computed } from "vue";
+import { ref, computed, onMounted, watch } from "vue";
 
 const videos = ref([
   {
@@ -124,42 +126,53 @@ const videos = ref([
   },
 ]);
 
-// Number of visible cards
+// 3 visible cards
 const visibleCards = 3;
 
-// Duplicate videos array to create infinite loop effect
-const loopedVideos = computed(() => [...videos.value, ...videos.value]);
+// Duplicate start + end for seamless infinite loop
+const loopedVideos = computed(() => {
+  return [
+    ...videos.value.slice(-visibleCards),
+    ...videos.value,
+    ...videos.value.slice(0, visibleCards),
+  ];
+});
 
-const currentIndex = ref(0);
+const currentIndex = ref(visibleCards);
+const track = ref<HTMLElement | null>(null);
 
 function next() {
   currentIndex.value++;
-  if (currentIndex.value >= videos.value.length) {
-    // Reset smoothly to start
-    setTimeout(() => {
-      currentIndex.value = 0;
-    }, 700);
-  }
 }
 
 function prev() {
-  if (currentIndex.value === 0) {
-    currentIndex.value = videos.value.length - 1;
-  } else {
-    currentIndex.value--;
-  }
+  currentIndex.value--;
 }
+
+// Watch for transition end and reset position instantly (no jump)
+watch(currentIndex, (newIndex) => {
+  const total = videos.value.length;
+  if (newIndex === loopedVideos.value.length - visibleCards) {
+    setTimeout(() => {
+      currentIndex.value = visibleCards;
+      if (track.value) track.value.style.transition = "none";
+      void track.value?.offsetHeight; // force reflow
+      if (track.value) track.value.style.transition = "";
+    }, 700);
+  } else if (newIndex === 0) {
+    setTimeout(() => {
+      currentIndex.value = total;
+      if (track.value) track.value.style.transition = "none";
+      void track.value?.offsetHeight;
+      if (track.value) track.value.style.transition = "";
+    }, 700);
+  }
+});
 </script>
 
 <style scoped>
 section {
   border-radius: 1.5rem;
-}
-.line-clamp-2 {
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
 }
 .line-clamp-3 {
   display: -webkit-box;
