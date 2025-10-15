@@ -5,9 +5,9 @@
       Découvrez nos contenus <span class="text-blue-500">gratuits</span>
     </h2>
     <p class="max-w-3xl mx-auto text-gray-500 mb-12">
-      Nos mini formations gratuites vous aideront à développer des fondations
-      solides dans les domaines du développement personnel, du business en
-      ligne, de l’entrepreneuriat et de l’investissement.
+      Nos mini formations et podcasts gratuits vous aideront à développer des
+      fondations solides dans le développement personnel, le business en ligne
+      et l’entrepreneuriat.
     </p>
 
     <div class="relative w-full max-w-6xl mx-auto">
@@ -30,7 +30,9 @@
             :key="index"
             class="min-w-full md:min-w-[33.33%] px-4"
           >
-            <div class="bg-white shadow-lg rounded-2xl p-6 text-left">
+            <div
+              class="bg-white shadow-lg rounded-2xl p-6 text-left transition-all duration-300 hover:shadow-blue-300 hover:shadow-xl hover:border hover:border-blue-400"
+            >
               <img :src="card.image" class="rounded-xl mb-4 w-full" alt="" />
               <h3 class="text-xl font-bold mb-2">{{ card.title }}</h3>
               <p class="text-gray-500 mb-6">{{ card.desc }}</p>
@@ -59,26 +61,48 @@
 import { ref } from "vue";
 
 const currentIndex = ref(0);
+
 const cards = ref([
   {
-    title: "Le E-Commerce 2.0",
-    image: "https://via.placeholder.com/400x200/ccf/000?text=E-Commerce",
-    desc: "Découvrez l’E-Commerce 2.0, les bases du business en ligne et comment lancer votre propre boutique.",
+    title: "Podcast avec Omar Rahmoun",
+    image:
+      "https://i.ibb.co/TMWd0BMz/OPTIMIZED-2-MB-Podcast-Omar-rahmoun-2.png",
+    desc: "Découvrez le parcours inspirant d’Omar Rahmoun et ses conseils pour réussir dans le business moderne.",
   },
   {
-    title: "L’Investissement Immobilier",
-    image: "https://via.placeholder.com/400x200/cce/000?text=Immobilier",
-    desc: "Une formation introductive au milieu de l’investissement immobilier pour bâtir votre patrimoine.",
+    title: "Podcast Épisode 2",
+    image: "https://i.ibb.co/k2jkbJj2/Optimized-2mb-Podcast-EP-2.png",
+    desc: "Un nouvel épisode dédié aux stratégies de réussite et à la motivation personnelle.",
   },
   {
-    title: "Le Business et l'IA",
-    image: "https://via.placeholder.com/400x200/ddf/000?text=Business+IA",
-    desc: "Apprenez à lancer votre business grâce au pouvoir de l’intelligence artificielle.",
+    title: "Podcast Épisode 2 (Version Optimisée)",
+    image: "https://i.ibb.co/s71YvYd/ep-2-opt.png",
+    desc: "Apprenez comment surmonter les blocages mentaux pour atteindre vos objectifs.",
   },
   {
-    title: "Le Développement Personnel",
-    image: "https://via.placeholder.com/400x200/bdf/000?text=Développement",
-    desc: "Renforcez votre mental et vos compétences pour réussir dans tous les domaines de la vie.",
+    title: "Podcast Épisode 3",
+    image: "https://i.ibb.co/670NwHSy/EP-3-OPT.png",
+    desc: "Explorez les secrets de la persévérance et de la discipline dans cet épisode inspirant.",
+  },
+  {
+    title: "Podcast Épisode 4",
+    image: "https://i.ibb.co/tMZjb4Nj/EP-4-Version-2-1.png",
+    desc: "Les erreurs à éviter lorsqu’on démarre son propre projet entrepreneurial.",
+  },
+  {
+    title: "Podcast Épisode 5",
+    image: "https://i.ibb.co/Ndmw1p8S/EP-5-Youtube-OPT-3.png",
+    desc: "Découvrez comment bâtir une présence forte en ligne grâce au contenu vidéo.",
+  },
+  {
+    title: "Podcast avec Idriss",
+    image: "https://i.ibb.co/tp3zPLpD/OPT-Podcast-idriss2-1.png",
+    desc: "Une conversation exclusive sur la réussite personnelle et la gestion du temps.",
+  },
+  {
+    title: "Podcast Spécial Motivation",
+    image: "https://i.ibb.co/WNMnnVdn/POD-OPT.png",
+    desc: "Un épisode pour booster votre énergie et retrouver la motivation au quotidien.",
   },
 ]);
 
