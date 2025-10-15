@@ -14,7 +14,7 @@
       <!-- Left arrow -->
       <button
         @click="prevSlide"
-        class="absolute left-0 top-1/2 -translate-y-1/2 bg-white shadow rounded-full w-10 h-10 flex items-center justify-center hover:bg-blue-100"
+        class="absolute left-0 top-1/2 -translate-y-1/2 bg-white shadow rounded-full w-10 h-10 flex items-center justify-center hover:bg-blue-100 z-10"
       >
         <span class="text-xl">‹</span>
       </button>
@@ -22,22 +22,26 @@
       <!-- Cards container -->
       <div class="overflow-hidden">
         <div
-          class="flex transition-transform duration-500"
+          class="flex transition-transform duration-500 ease-in-out"
           :style="{ transform: `translateX(-${currentIndex * 100}%)` }"
         >
           <div
-            v-for="(card, index) in cards"
+            v-for="(card, index) in displayCards"
             :key="index"
             class="min-w-full md:min-w-[33.33%] px-4"
           >
             <div
-              class="bg-white shadow-lg rounded-2xl p-6 text-left transition-all duration-300 hover:shadow-blue-300 hover:shadow-xl hover:border hover:border-blue-400"
+              class="bg-white shadow-lg rounded-2xl p-6 text-left transition-all duration-300 hover:shadow-blue-300 hover:shadow-xl hover:border hover:border-blue-400 h-[480px] flex flex-col"
             >
-              <img :src="card.image" class="rounded-xl mb-4 w-full" alt="" />
+              <img
+                :src="card.image"
+                class="rounded-xl mb-4 w-full h-48 object-cover"
+                alt=""
+              />
               <h3 class="text-xl font-bold mb-2">{{ card.title }}</h3>
-              <p class="text-gray-500 mb-6">{{ card.desc }}</p>
+              <p class="text-gray-500 flex-grow">{{ card.desc }}</p>
               <button
-                class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-full transition"
+                class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-full mt-6 transition"
               >
                 Voir la formation gratuite
               </button>
@@ -49,7 +53,7 @@
       <!-- Right arrow -->
       <button
         @click="nextSlide"
-        class="absolute right-0 top-1/2 -translate-y-1/2 bg-white shadow rounded-full w-10 h-10 flex items-center justify-center hover:bg-blue-100"
+        class="absolute right-0 top-1/2 -translate-y-1/2 bg-white shadow rounded-full w-10 h-10 flex items-center justify-center hover:bg-blue-100 z-10"
       >
         <span class="text-xl">›</span>
       </button>
@@ -58,7 +62,7 @@
 </template>
 
 <script setup>
-import { ref } from "vue";
+import { ref, computed } from "vue";
 
 const currentIndex = ref(0);
 
@@ -106,15 +110,25 @@ const cards = ref([
   },
 ]);
 
+// Show only 3 cards at a time
+const displayCards = computed(() => {
+  // Duplicate start and end for smooth infinite scroll illusion
+  return [...cards.value, ...cards.value.slice(0, 3)];
+});
+
 function nextSlide() {
-  if (currentIndex.value < cards.value.length - 3) {
+  if (currentIndex.value < cards.value.length) {
     currentIndex.value++;
+  } else {
+    currentIndex.value = 0;
   }
 }
 
 function prevSlide() {
   if (currentIndex.value > 0) {
     currentIndex.value--;
+  } else {
+    currentIndex.value = cards.value.length - 1;
   }
 }
 </script>
