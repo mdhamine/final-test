@@ -3,9 +3,12 @@
     <h2 class="text-3xl md:text-4xl font-bold mb-6">
       🎙️ Discover <span class="text-blue-500">FluentlyTalk</span> Episodes
     </h2>
-    <p class="max-w-3xl mx-auto text-gray-500 mb-12">
-      Inspiring conversations with Algerian entrepreneurs, creators, and
-      dreamers sharing their journeys, lessons, and mindsets for success.
+    <p class="max-w-3xl mx-auto text-gray-500 mb-12 leading-relaxed">
+      Toujours hésitant ? <br />
+      Découvrez nos contenus gratuits. <br />
+      Nos mini formations gratuites vous aideront à développer des fondations
+      solides dans les domaines du développement personnel, du business en
+      ligne, de l’entrepreneuriat et de l’investissement.
     </p>
 
     <div class="relative w-full max-w-6xl mx-auto">
@@ -21,27 +24,33 @@
       <div class="overflow-hidden">
         <div
           class="flex transition-transform duration-700 ease-in-out"
-          :style="{ transform: `translateX(-${currentIndex * 100}%)` }"
+          :style="{
+            transform: `translateX(-${currentIndex * (100 / visibleCards)}%)`,
+          }"
         >
           <div
-            v-for="(video, index) in videos"
+            v-for="(video, index) in loopedVideos"
             :key="index"
-            class="min-w-full md:min-w-[33.33%] px-4"
+            class="w-full md:w-1/3 px-4 flex-shrink-0"
           >
             <div
-              class="bg-white shadow-lg rounded-2xl p-6 text-left h-[420px] hover:border-2 hover:border-blue-400 transition-all duration-300"
+              class="bg-white shadow-lg rounded-2xl p-6 text-left h-[420px] flex flex-col justify-between hover:border-2 hover:border-blue-400 transition-all duration-300"
             >
-              <img
-                :src="video.thumbnail"
-                :alt="video.title"
-                class="rounded-xl mb-4 w-full h-48 object-cover"
-              />
-              <h3 class="text-xl font-bold mb-2">{{ video.title }}</h3>
-              <p class="text-gray-500 mb-6">{{ video.desc }}</p>
+              <div>
+                <img
+                  :src="video.thumbnail"
+                  :alt="video.title"
+                  class="rounded-xl mb-4 w-full h-48 object-cover"
+                />
+                <h3 class="text-xl font-bold mb-2 line-clamp-2">
+                  {{ video.title }}
+                </h3>
+                <p class="text-gray-500 mb-4 line-clamp-3">{{ video.desc }}</p>
+              </div>
               <a
                 :href="video.link"
                 target="_blank"
-                class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-full transition"
+                class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-full text-center transition"
               >
                 Watch on YouTube
               </a>
@@ -62,7 +71,7 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from "vue";
+import { ref, computed } from "vue";
 
 const videos = ref([
   {
@@ -115,20 +124,47 @@ const videos = ref([
   },
 ]);
 
+// Number of visible cards
+const visibleCards = 3;
+
+// Duplicate videos array to create infinite loop effect
+const loopedVideos = computed(() => [...videos.value, ...videos.value]);
+
 const currentIndex = ref(0);
 
 function next() {
-  currentIndex.value = (currentIndex.value + 1) % videos.value.length;
+  currentIndex.value++;
+  if (currentIndex.value >= videos.value.length) {
+    // Reset smoothly to start
+    setTimeout(() => {
+      currentIndex.value = 0;
+    }, 700);
+  }
 }
 
 function prev() {
-  currentIndex.value =
-    (currentIndex.value - 1 + videos.value.length) % videos.value.length;
+  if (currentIndex.value === 0) {
+    currentIndex.value = videos.value.length - 1;
+  } else {
+    currentIndex.value--;
+  }
 }
 </script>
 
 <style scoped>
 section {
   border-radius: 1.5rem;
+}
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
 </style>
