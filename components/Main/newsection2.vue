@@ -23,12 +23,14 @@
       <div class="overflow-hidden">
         <div
           class="flex transition-transform duration-500 ease-in-out"
-          :style="{ transform: `translateX(-${currentIndex * 100}%)` }"
+          :style="{
+            transform: `translateX(-${currentIndex * (100 / visibleCards)}%)`,
+          }"
         >
           <div
-            v-for="(card, index) in displayCards"
+            v-for="(card, index) in extendedCards"
             :key="index"
-            class="min-w-full md:min-w-[33.33%] px-4"
+            class="min-w-[33.33%] px-4"
           >
             <div
               class="bg-white shadow-lg rounded-2xl p-6 text-left transition-all duration-300 hover:shadow-blue-300 hover:shadow-xl hover:border hover:border-blue-400 h-[480px] flex flex-col"
@@ -62,9 +64,10 @@
 </template>
 
 <script setup>
-import { ref, computed } from "vue";
+import { ref, computed, onMounted } from "vue";
 
-const currentIndex = ref(0);
+const visibleCards = 3; // number of visible cards
+const currentIndex = ref(visibleCards); // start from the first real slide
 
 const cards = ref([
   {
@@ -110,27 +113,42 @@ const cards = ref([
   },
 ]);
 
-// Show only 3 cards at a time
-const displayCards = computed(() => {
-  // Duplicate start and end for smooth infinite scroll illusion
-  return [...cards.value, ...cards.value.slice(0, 3)];
+// Duplicate first & last slides for smooth infinite loop
+const extendedCards = computed(() => {
+  const start = cards.value.slice(-visibleCards);
+  const end = cards.value.slice(0, visibleCards);
+  return [...start, ...cards.value, ...end];
 });
 
+let isTransitioning = false;
+
 function nextSlide() {
-  if (currentIndex.value < cards.value.length) {
-    currentIndex.value++;
-  } else {
-    currentIndex.value = 0;
-  }
+  if (isTransitioning) return;
+  isTransitioning = true;
+  currentIndex.value++;
+  setTimeout(() => {
+    if (currentIndex.value >= cards.value.length + visibleCards) {
+      currentIndex.value = visibleCards;
+    }
+    isTransitioning = false;
+  }, 500); // match duration-500
 }
 
 function prevSlide() {
-  if (currentIndex.value > 0) {
-    currentIndex.value--;
-  } else {
-    currentIndex.value = cards.value.length - 1;
-  }
+  if (isTransitioning) return;
+  isTransitioning = true;
+  currentIndex.value--;
+  setTimeout(() => {
+    if (currentIndex.value < visibleCards) {
+      currentIndex.value = cards.value.length + visibleCards - 1;
+    }
+    isTransitioning = false;
+  }, 500);
 }
+
+onMounted(() => {
+  currentIndex.value = visibleCards;
+});
 </script>
 
 <style scoped>
