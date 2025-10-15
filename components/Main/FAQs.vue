@@ -1,126 +1,134 @@
 <template>
-  <div class="relative w-full overflow-hidden">
-    <h2 class="text-2xl font-bold text-center mb-6">
-      🎥 Fluently Academy Episodes
+  <section class="bg-[#f7faff] py-16 text-center">
+    <h2 class="text-3xl md:text-4xl font-bold mb-6">
+      🎙️ Discover <span class="text-blue-500">FluentlyTalk</span> Episodes
     </h2>
+    <p class="max-w-3xl mx-auto text-gray-500 mb-12">
+      Inspiring conversations with Algerian entrepreneurs, creators, and
+      dreamers sharing their journeys, lessons, and mindsets for success.
+    </p>
 
-    <!-- Slider -->
-    <div
-      class="flex transition-transform duration-700 ease-in-out"
-      :style="{ transform: `translateX(-${currentIndex * 100}%)` }"
-    >
-      <div
-        v-for="(video, index) in videos"
-        :key="index"
-        class="w-full flex-shrink-0 px-4"
+    <div class="relative w-full max-w-6xl mx-auto">
+      <!-- Left arrow -->
+      <button
+        @click="prev"
+        class="absolute left-0 top-1/2 -translate-y-1/2 bg-white shadow rounded-full w-10 h-10 flex items-center justify-center hover:bg-blue-100 z-10"
       >
+        <span class="text-xl">‹</span>
+      </button>
+
+      <!-- Slider -->
+      <div class="overflow-hidden">
         <div
-          class="bg-white shadow-lg rounded-2xl p-4 flex flex-col justify-between h-[360px] text-center"
+          class="flex transition-transform duration-700 ease-in-out"
+          :style="{ transform: `translateX(-${currentIndex * 100}%)` }"
         >
-          <div>
-            <img
-              :src="video.thumbnail"
-              :alt="video.title"
-              class="w-full h-40 object-cover rounded-xl mb-3"
-            />
-            <h3 class="text-lg font-semibold mb-2">{{ video.title }}</h3>
-            <p class="text-gray-600 text-sm">{{ video.desc }}</p>
-          </div>
-          <a
-            :href="video.link"
-            target="_blank"
-            class="mt-4 text-blue-600 font-medium hover:underline"
+          <div
+            v-for="(video, index) in videos"
+            :key="index"
+            class="min-w-full md:min-w-[33.33%] px-4"
           >
-            Watch on YouTube →
-          </a>
+            <div
+              class="bg-white shadow-lg rounded-2xl p-6 text-left h-[420px] hover:border-2 hover:border-blue-400 transition-all duration-300"
+            >
+              <img
+                :src="video.thumbnail"
+                :alt="video.title"
+                class="rounded-xl mb-4 w-full h-48 object-cover"
+              />
+              <h3 class="text-xl font-bold mb-2">{{ video.title }}</h3>
+              <p class="text-gray-500 mb-6">{{ video.desc }}</p>
+              <a
+                :href="video.link"
+                target="_blank"
+                class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-full transition"
+              >
+                Watch on YouTube
+              </a>
+            </div>
+          </div>
         </div>
       </div>
-    </div>
 
-    <!-- Arrows -->
-    <button
-      @click="prev"
-      class="absolute top-1/2 -translate-y-1/2 left-3 bg-blue-500 hover:bg-blue-600 text-white p-3 rounded-full shadow-lg"
-    >
-      ‹
-    </button>
-    <button
-      @click="next"
-      class="absolute top-1/2 -translate-y-1/2 right-3 bg-blue-500 hover:bg-blue-600 text-white p-3 rounded-full shadow-lg"
-    >
-      ›
-    </button>
-  </div>
+      <!-- Right arrow -->
+      <button
+        @click="next"
+        class="absolute right-0 top-1/2 -translate-y-1/2 bg-white shadow rounded-full w-10 h-10 flex items-center justify-center hover:bg-blue-100 z-10"
+      >
+        <span class="text-xl">›</span>
+      </button>
+    </div>
+  </section>
 </template>
 
 <script setup lang="ts">
 import { ref } from "vue";
 
-const videos = [
+const videos = ref([
   {
-    title: "FluentlyTalk Ep 08 with Ahmed Bouzid",
-    desc: "Ahmed Bouzid shares how he asked for 6 billion centimes to kickstart his project.",
-    thumbnail: "https://i.ytimg.com/vi/VIDEO_ID_1/maxresdefault.jpg",
-    link: "https://www.youtube.com/watch?v=VIDEO_ID_1",
+    title: "FluentlyTalk Ep 01 — Omar Rahmoun",
+    desc: "Why Omar wakes up at 4 AM to chase his dreams — a talk about discipline and mindset.",
+    thumbnail: "https://i.ytimg.com/vi/BaUdOKGuA40/maxresdefault.jpg",
+    link: "https://www.youtube.com/watch?v=BaUdOKGuA40",
   },
   {
-    title: "FluentlyTalk Ep 07 with Ladjali Raouf",
-    desc: "Is the medical field becoming a business in Algeria? Raouf shares his thoughts.",
-    thumbnail: "https://i.ytimg.com/vi/VIDEO_ID_2/maxresdefault.jpg",
-    link: "https://www.youtube.com/watch?v=VIDEO_ID_2",
+    title: "FluentlyTalk Ep 02 — Oussama Hamouche",
+    desc: "An Algerian millionaire shares how he built his business empire from the ground up.",
+    thumbnail: "https://i.ytimg.com/vi/X8OqdwWqWso/maxresdefault.jpg",
+    link: "https://www.youtube.com/watch?v=X8OqdwWqWso",
   },
   {
-    title: "FluentlyTalk Ep 06 with Belkadi Manel",
-    desc: "How to aim for a perfect 18 or 19 in the Algerian baccalaureate — Manel explains.",
-    thumbnail: "https://i.ytimg.com/vi/VIDEO_ID_3/maxresdefault.jpg",
-    link: "https://www.youtube.com/watch?v=VIDEO_ID_3",
+    title: "FluentlyTalk Ep 03 — Idris Smati",
+    desc: "Why Idris left university to work in Qatar and how that decision changed his life.",
+    thumbnail: "https://i.ytimg.com/vi/1T68O4Jzfv4/maxresdefault.jpg",
+    link: "https://www.youtube.com/watch?v=1T68O4Jzfv4",
   },
   {
-    title: "FluentlyTalk Ep 05 with ROC DZ",
-    desc: "Can you really start from zero in Algeria? ROC DZ gives his honest answer.",
-    thumbnail: "https://i.ytimg.com/vi/VIDEO_ID_4/maxresdefault.jpg",
-    link: "https://www.youtube.com/watch?v=VIDEO_ID_4",
+    title: "FluentlyTalk Ep 04 — Yassine Abdeldjebbar",
+    desc: "From Algeria to the U.S.: Yassine’s inspiring journey to becoming a researcher abroad.",
+    thumbnail: "https://i.ytimg.com/vi/sSCa9LimxzQ/maxresdefault.jpg",
+    link: "https://www.youtube.com/watch?v=sSCa9LimxzQ",
   },
   {
-    title: "FluentlyTalk Ep 04 with Yassine Abdeldjebbar",
-    desc: "From an Algerian student to a researcher in the U.S. — Yassine’s inspiring journey.",
-    thumbnail: "https://i.ytimg.com/vi/VIDEO_ID_5/maxresdefault.jpg",
-    link: "https://www.youtube.com/watch?v=VIDEO_ID_5",
+    title: "FluentlyTalk Ep 05 — ROC DZ",
+    desc: "Is it really possible to start from zero in Algeria? ROC DZ gives his raw perspective.",
+    thumbnail: "https://i.ytimg.com/vi/iv66rGFWMmI/maxresdefault.jpg",
+    link: "https://www.youtube.com/watch?v=iv66rGFWMmI",
   },
   {
-    title: "FluentlyTalk Ep 03 with Idris Smati",
-    desc: "Why did Idris leave his studies to work in Qatar? He shares his full story.",
-    thumbnail: "https://i.ytimg.com/vi/VIDEO_ID_6/maxresdefault.jpg",
-    link: "https://www.youtube.com/watch?v=VIDEO_ID_6",
+    title: "FluentlyTalk Ep 06 — Belkadi Manel",
+    desc: "How Manel scored 18+ in the Algerian Baccalaureate — strategies for excellence.",
+    thumbnail: "https://i.ytimg.com/vi/8asdkghlcpA/maxresdefault.jpg",
+    link: "https://www.youtube.com/watch?v=8asdkghlcpA",
   },
   {
-    title: "FluentlyTalk Ep 02 with Oussama Hamouche",
-    desc: "An Algerian millionaire reveals how he started, struggled, and succeeded.",
-    thumbnail: "https://i.ytimg.com/vi/VIDEO_ID_7/maxresdefault.jpg",
-    link: "https://www.youtube.com/watch?v=VIDEO_ID_7",
+    title: "FluentlyTalk Ep 07 — Ladjali Raouf",
+    desc: "Has medicine become a business in Algeria? Raouf shares his honest opinion.",
+    thumbnail: "https://i.ytimg.com/vi/35Tjrg4KJYc/maxresdefault.jpg",
+    link: "https://www.youtube.com/watch?v=35Tjrg4KJYc",
   },
   {
-    title: "FluentlyTalk Ep 01 with Omar Rahmoun",
-    desc: "Why Omar wakes up at 4 AM to work on his dreams — discipline and passion.",
-    thumbnail: "https://i.ytimg.com/vi/VIDEO_ID_8/maxresdefault.jpg",
-    link: "https://www.youtube.com/watch?v=VIDEO_ID_8",
+    title: "FluentlyTalk Ep 08 — Ahmed Bouzid",
+    desc: "Ahmed Bouzid reveals how he asked for 6 billion centimes to start his project.",
+    thumbnail: "https://i.ytimg.com/vi/2uq8LwmDQ6Q/maxresdefault.jpg",
+    link: "https://www.youtube.com/watch?v=2uq8LwmDQ6Q",
   },
-];
+]);
 
 const currentIndex = ref(0);
 
-const next = () => {
-  currentIndex.value = (currentIndex.value + 1) % videos.length;
-};
+function next() {
+  currentIndex.value = (currentIndex.value + 1) % videos.value.length;
+}
 
-const prev = () => {
-  currentIndex.value = (currentIndex.value - 1 + videos.length) % videos.length;
-};
+function prev() {
+  currentIndex.value =
+    (currentIndex.value - 1 + videos.value.length) % videos.value.length;
+}
 </script>
 
 <style scoped>
-/* Hide scrollbar if horizontal overflow happens */
-::-webkit-scrollbar {
-  display: none;
+section {
+  border-radius: 1.5rem;
 }
 </style>
