@@ -1,183 +1,139 @@
 <template>
-  <section class="bg-[#f7faff] py-16 text-center overflow-hidden">
-    <h2 class="text-3xl md:text-4xl font-bold mb-6">
-      🎙️ Discover <span class="text-blue-500">FluentlyTalk</span> Episodes
-    </h2>
-
-    <p class="max-w-3xl mx-auto text-gray-500 mb-12 leading-relaxed">
+  <section class="bg-[#f7faff] py-16 text-center">
+    <h2 class="text-3xl md:text-4xl font-bold mb-6 leading-snug">
       Toujours hésitant ? <br />
-      Découvrez nos contenus gratuits. <br />
+      <span class="text-blue-500">Découvrez nos contenus gratuits</span>
+    </h2>
+    <p class="max-w-3xl mx-auto text-gray-500 mb-12">
       Nos mini formations gratuites vous aideront à développer des fondations
       solides dans les domaines du développement personnel, du business en
       ligne, de l’entrepreneuriat et de l’investissement.
     </p>
 
     <div class="relative w-full max-w-6xl mx-auto">
-      <!-- Left arrow -->
-      <button
-        @click="prev"
-        class="absolute left-0 top-1/2 -translate-y-1/2 bg-white shadow rounded-full w-10 h-10 flex items-center justify-center hover:bg-blue-100 z-10"
+      <div
+        class="flex gap-6 overflow-hidden"
+        @mouseenter="pauseAutoscroll"
+        @mouseleave="resumeAutoscroll"
       >
-        ‹
-      </button>
-
-      <!-- Slider -->
-      <div class="overflow-hidden">
         <div
-          ref="track"
-          class="flex transition-transform duration-700 ease-in-out"
-          :style="{
-            transform: `translateX(-${currentIndex * (100 / visibleCards)}%)`,
-          }"
+          v-for="(video, index) in displayedVideos"
+          :key="index"
+          class="bg-white shadow-md rounded-2xl flex flex-col justify-between w-72 flex-shrink-0 transition-transform duration-500"
         >
-          <div
-            v-for="(video, index) in loopedVideos"
-            :key="index"
-            class="w-full md:w-1/3 px-4 flex-shrink-0"
-          >
-            <div
-              class="bg-white shadow-lg rounded-2xl p-6 text-left h-[420px] flex flex-col justify-between hover:border-2 hover:border-blue-400 transition-all duration-300"
-            >
-              <div>
-                <img
-                  :src="video.thumbnail"
-                  :alt="video.title"
-                  class="rounded-xl mb-4 w-full h-48 object-cover"
-                />
-                <h3 class="text-xl font-bold mb-2">{{ video.title }}</h3>
-                <p class="text-gray-500 mb-4 line-clamp-3">
-                  {{ video.desc }}
-                </p>
-              </div>
-              <a
-                :href="video.link"
-                target="_blank"
-                class="bg-blue-500 hover:bg-blue-600 text-white px-6 py-2 rounded-full text-center transition"
-              >
-                Watch on YouTube
-              </a>
+          <div>
+            <img
+              :src="video.img"
+              alt="Video thumbnail"
+              class="rounded-t-2xl w-full h-44 object-cover"
+            />
+            <div class="p-4 flex flex-col h-[220px]">
+              <h3 class="text-lg font-semibold mb-2">{{ video.title }}</h3>
+              <p class="text-gray-500 text-sm flex-grow">{{ video.desc }}</p>
             </div>
+          </div>
+          <div class="p-4 pt-0">
+            <a
+              :href="video.link"
+              target="_blank"
+              class="bg-blue-500 text-white px-4 py-2 rounded-xl hover:bg-blue-600 inline-block w-full text-center"
+            >
+              Watch on YouTube
+            </a>
           </div>
         </div>
       </div>
 
-      <!-- Right arrow -->
       <button
-        @click="next"
-        class="absolute right-0 top-1/2 -translate-y-1/2 bg-white shadow rounded-full w-10 h-10 flex items-center justify-center hover:bg-blue-100 z-10"
+        @click="scrollLeft"
+        class="absolute top-1/2 left-0 transform -translate-y-1/2 bg-white rounded-full shadow p-2 hover:bg-blue-100"
       >
-        ›
+        ◀
+      </button>
+      <button
+        @click="scrollRight"
+        class="absolute top-1/2 right-0 transform -translate-y-1/2 bg-white rounded-full shadow p-2 hover:bg-blue-100"
+      >
+        ▶
       </button>
     </div>
   </section>
 </template>
 
-<script setup lang="ts">
-import { ref, computed, onMounted, watch } from "vue";
+<script setup>
+import { ref, onMounted, onBeforeUnmount } from "vue";
 
-const videos = ref([
+const videos = [
   {
-    title: "FluentlyTalk Ep 01 — Omar Rahmoun",
-    desc: "Why Omar wakes up at 4 AM to chase his dreams — a talk about discipline and mindset.",
-    thumbnail: "https://i.ytimg.com/vi/BaUdOKGuA40/maxresdefault.jpg",
-    link: "https://www.youtube.com/watch?v=BaUdOKGuA40",
+    title: "How to Start Your Business",
+    desc: "Learn how to launch your online business effectively with simple steps.",
+    img: "https://img.youtube.com/vi/Hw2eCvD2HOM/hqdefault.jpg",
+    link: "https://www.youtube.com/watch?v=Hw2eCvD2HOM",
   },
   {
-    title: "FluentlyTalk Ep 02 — Oussama Hamouche",
-    desc: "An Algerian millionaire shares how he built his business empire from the ground up.",
-    thumbnail: "https://i.ytimg.com/vi/X8OqdwWqWso/maxresdefault.jpg",
-    link: "https://www.youtube.com/watch?v=X8OqdwWqWso",
+    title: "Build Self Discipline",
+    desc: "Master your habits to stay consistent and reach your goals.",
+    img: "https://img.youtube.com/vi/xp2Pdm2DqTQ/hqdefault.jpg",
+    link: "https://www.youtube.com/watch?v=xp2Pdm2DqTQ",
   },
   {
-    title: "FluentlyTalk Ep 03 — Idris Smati",
-    desc: "Why Idris left university to work in Qatar and how that decision changed his life.",
-    thumbnail: "https://i.ytimg.com/vi/1T68O4Jzfv4/maxresdefault.jpg",
-    link: "https://www.youtube.com/watch?v=1T68O4Jzfv4",
+    title: "Invest Smartly",
+    desc: "Understand the basics of investing and managing your money wisely.",
+    img: "https://img.youtube.com/vi/UKkzvY9P-nw/hqdefault.jpg",
+    link: "https://www.youtube.com/watch?v=UKkzvY9P-nw",
   },
   {
-    title: "FluentlyTalk Ep 04 — Yassine Abdeldjebbar",
-    desc: "From Algeria to the U.S.: Yassine’s inspiring journey to becoming a researcher abroad.",
-    thumbnail: "https://i.ytimg.com/vi/sSCa9LimxzQ/maxresdefault.jpg",
-    link: "https://www.youtube.com/watch?v=sSCa9LimxzQ",
+    title: "Time Management",
+    desc: "Practical tips to manage your day and boost productivity.",
+    img: "https://img.youtube.com/vi/nWbZjq4gC7A/hqdefault.jpg",
+    link: "https://www.youtube.com/watch?v=nWbZjq4gC7A",
   },
   {
-    title: "FluentlyTalk Ep 05 — ROC DZ",
-    desc: "Is it really possible to start from zero in Algeria? ROC DZ gives his raw perspective.",
-    thumbnail: "https://i.ytimg.com/vi/iv66rGFWMmI/maxresdefault.jpg",
-    link: "https://www.youtube.com/watch?v=iv66rGFWMmI",
+    title: "Overcome Fear of Failure",
+    desc: "Shift your mindset and see failure as a learning opportunity.",
+    img: "https://img.youtube.com/vi/0deYETmQw08/hqdefault.jpg",
+    link: "https://www.youtube.com/watch?v=0deYETmQw08",
   },
   {
-    title: "FluentlyTalk Ep 06 — Belkadi Manel",
-    desc: "How Manel scored 18+ in the Algerian Baccalaureate — strategies for excellence.",
-    thumbnail: "https://i.ytimg.com/vi/8asdkghlcpA/maxresdefault.jpg",
-    link: "https://www.youtube.com/watch?v=8asdkghlcpA",
+    title: "Personal Branding 101",
+    desc: "Learn how to build a strong personal brand that stands out.",
+    img: "https://img.youtube.com/vi/Upbm-9xsrnQ/hqdefault.jpg",
+    link: "https://www.youtube.com/watch?v=Upbm-9xsrnQ",
   },
   {
-    title: "FluentlyTalk Ep 07 — Ladjali Raouf",
-    desc: "Has medicine become a business in Algeria? Raouf shares his honest opinion.",
-    thumbnail: "https://i.ytimg.com/vi/35Tjrg4KJYc/maxresdefault.jpg",
-    link: "https://www.youtube.com/watch?v=35Tjrg4KJYc",
+    title: "Entrepreneur Mindset",
+    desc: "Develop the right mentality to grow and adapt as an entrepreneur.",
+    img: "https://img.youtube.com/vi/YRkW0v7oBtY/hqdefault.jpg",
+    link: "https://www.youtube.com/watch?v=YRkW0v7oBtY",
   },
   {
-    title: "FluentlyTalk Ep 08 — Ahmed Bouzid",
-    desc: "Ahmed Bouzid reveals how he asked for 6 billion centimes to start his project.",
-    thumbnail: "https://i.ytimg.com/vi/2uq8LwmDQ6Q/maxresdefault.jpg",
-    link: "https://www.youtube.com/watch?v=2uq8LwmDQ6Q",
+    title: "Create Multiple Income Streams",
+    desc: "Discover practical ways to diversify your income sources.",
+    img: "https://img.youtube.com/vi/5zXAlx4J4wQ/hqdefault.jpg",
+    link: "https://www.youtube.com/watch?v=5zXAlx4J4wQ",
   },
-]);
+];
 
-// 3 visible cards
-const visibleCards = 3;
+const displayedVideos = ref([...videos, ...videos]); // duplicate for infinite loop
+let interval;
 
-// Duplicate start + end for seamless infinite loop
-const loopedVideos = computed(() => {
-  return [
-    ...videos.value.slice(-visibleCards),
-    ...videos.value,
-    ...videos.value.slice(0, visibleCards),
-  ];
-});
+const scrollRight = () => {
+  const first = displayedVideos.value.shift();
+  displayedVideos.value.push(first);
+};
 
-const currentIndex = ref(visibleCards);
-const track = ref<HTMLElement | null>(null);
+const scrollLeft = () => {
+  const last = displayedVideos.value.pop();
+  displayedVideos.value.unshift(last);
+};
 
-function next() {
-  currentIndex.value++;
-}
+const startAutoscroll = () => {
+  interval = setInterval(scrollRight, 3000);
+};
 
-function prev() {
-  currentIndex.value--;
-}
+const pauseAutoscroll = () => clearInterval(interval);
+const resumeAutoscroll = () => startAutoscroll();
 
-// Watch for transition end and reset position instantly (no jump)
-watch(currentIndex, (newIndex) => {
-  const total = videos.value.length;
-  if (newIndex === loopedVideos.value.length - visibleCards) {
-    setTimeout(() => {
-      currentIndex.value = visibleCards;
-      if (track.value) track.value.style.transition = "none";
-      void track.value?.offsetHeight; // force reflow
-      if (track.value) track.value.style.transition = "";
-    }, 700);
-  } else if (newIndex === 0) {
-    setTimeout(() => {
-      currentIndex.value = total;
-      if (track.value) track.value.style.transition = "none";
-      void track.value?.offsetHeight;
-      if (track.value) track.value.style.transition = "";
-    }, 700);
-  }
-});
+onMounted(startAutoscroll);
+onBeforeUnmount(pauseAutoscroll);
 </script>
-
-<style scoped>
-section {
-  border-radius: 1.5rem;
-}
-.line-clamp-3 {
-  display: -webkit-box;
-  -webkit-line-clamp: 3;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-</style>
