@@ -6,9 +6,9 @@
     </h2>
 
     <p class="max-w-3xl mx-auto text-gray-500 mb-12 px-4">
-      Nos mini formations gratuites vous aideront à développer des fondations
-      solides dans les domaines du développement personnel, du business en
-      ligne, de l’entrepreneuriat et de l’investissement.
+      Nos épisodes FluentlyTalk gratuits vous inspireront à travers les histoires
+      de réussite, les parcours atypiques et les conseils pratiques de jeunes
+      algériens ambitieux.
     </p>
 
     <div class="relative w-full max-w-6xl mx-auto">
@@ -24,8 +24,8 @@
         >
           <div>
             <img
-              :src="video.img"
-              alt="Video thumbnail"
+              :src="video.thumbnail"
+              :alt="video.title"
               class="rounded-t-2xl w-full h-40 sm:h-44 object-cover"
             />
             <div class="p-4 flex flex-col h-[200px] sm:h-[220px]">
@@ -41,13 +41,13 @@
               target="_blank"
               class="bg-blue-500 text-white px-4 py-2 rounded-xl hover:bg-blue-600 inline-block w-full text-center text-sm sm:text-base"
             >
-              Watch on YouTube
+              Regarder sur YouTube
             </a>
           </div>
         </div>
       </div>
 
-      <!-- Navigation Buttons (hidden on mobile) -->
+      <!-- Navigation buttons (hidden on mobile) -->
       <button
         @click="scrollLeft"
         class="hidden sm:flex absolute top-1/2 left-0 transform -translate-y-1/2 bg-white rounded-full shadow p-2 hover:bg-blue-100"
@@ -67,58 +67,54 @@
 <script setup>
 import { ref, onMounted, onBeforeUnmount } from "vue";
 
-const videos = [
+const videos = ref([
   {
-    title: "How to Start Your Business",
-    desc: "Learn how to launch your online business effectively with simple steps.",
-    img: "https://img.youtube.com/vi/Hw2eCvD2HOM/hqdefault.jpg",
-    link: "https://www.youtube.com/watch?v=Hw2eCvD2HOM",
+    title: "FluentlyTalk Ep 01 — Omar Rahmoun",
+    desc: "Why Omar wakes up at 4 AM to chase his dreams — a talk about discipline and mindset.",
+    thumbnail: "https://i.ytimg.com/vi/BaUdOKGuA40/maxresdefault.jpg",
+    link: "https://www.youtube.com/watch?v=BaUdOKGuA40",
   },
   {
-    title: "Build Self Discipline",
-    desc: "Master your habits to stay consistent and reach your goals.",
-    img: "https://img.youtube.com/vi/xp2Pdm2DqTQ/hqdefault.jpg",
-    link: "https://www.youtube.com/watch?v=xp2Pdm2DqTQ",
+    title: "FluentlyTalk Ep 02 — Oussama Hamouche",
+    desc: "An Algerian millionaire shares how he built his business empire from the ground up.",
+    thumbnail: "https://i.ytimg.com/vi/X8OqdwWqWso/maxresdefault.jpg",
+    link: "https://www.youtube.com/watch?v=X8OqdwWqWso",
   },
   {
-    title: "Invest Smartly",
-    desc: "Understand the basics of investing and managing your money wisely.",
-    img: "https://img.youtube.com/vi/UKkzvY9P-nw/hqdefault.jpg",
-    link: "https://www.youtube.com/watch?v=UKkzvY9P-nw",
+    title: "FluentlyTalk Ep 03 — Idris Smati",
+    desc: "Why Idris left university to work in Qatar and how that decision changed his life.",
+    thumbnail: "https://i.ytimg.com/vi/1T68O4Jzfv4/maxresdefault.jpg",
+    link: "https://www.youtube.com/watch?v=1T68O4Jzfv4",
   },
   {
-    title: "Time Management",
-    desc: "Practical tips to manage your day and boost productivity.",
-    img: "https://img.youtube.com/vi/nWbZjq4gC7A/hqdefault.jpg",
-    link: "https://www.youtube.com/watch?v=nWbZjq4gC7A",
+    title: "FluentlyTalk Ep 04 — Yassine Abdeldjebbar",
+    desc: "From Algeria to the U.S.: Yassine’s inspiring journey to becoming a researcher abroad.",
+    thumbnail: "https://i.ytimg.com/vi/sSCa9LimxzQ/maxresdefault.jpg",
+    link: "https://www.youtube.com/watch?v=sSCa9LimxzQ",
   },
   {
-    title: "Overcome Fear of Failure",
-    desc: "Shift your mindset and see failure as a learning opportunity.",
-    img: "https://img.youtube.com/vi/0deYETmQw08/hqdefault.jpg",
-    link: "https://www.youtube.com/watch?v=0deYETmQw08",
+    title: "FluentlyTalk Ep 05 — ROC DZ",
+    desc: "Is it really possible to start from zero in Algeria? ROC DZ gives his raw perspective.",
+    thumbnail: "https://i.ytimg.com/vi/iv66rGFWMmI/maxresdefault.jpg",
+    link: "https://www.youtube.com/watch?v=iv66rGFWMmI",
   },
   {
-    title: "Personal Branding 101",
-    desc: "Learn how to build a strong personal brand that stands out.",
-    img: "https://img.youtube.com/vi/Upbm-9xsrnQ/hqdefault.jpg",
-    link: "https://www.youtube.com/watch?v=Upbm-9xsrnQ",
+    title: "FluentlyTalk Ep 06 — Belkadi Manel",
+    desc: "How Manel scored 18+ in the Algerian Baccalaureate — strategies for excellence.",
+    thumbnail: "https://i.ytimg.com/vi/8asdkghlcpA/maxresdefault.jpg",
+    link: "https://www.youtube.com/watch?v=8asdkghlcpA",
   },
   {
-    title: "Entrepreneur Mindset",
-    desc: "Develop the right mentality to grow and adapt as an entrepreneur.",
-    img: "https://img.youtube.com/vi/YRkW0v7oBtY/hqdefault.jpg",
-    link: "https://www.youtube.com/watch?v=YRkW0v7oBtY",
+    title: "FluentlyTalk Ep 07 — Ladjali Raouf",
+    desc: "Has medicine become a business in Algeria? Raouf shares his honest opinion.",
+    thumbnail: "https://i.ytimg.com/vi/35Tjrg4KJYc/maxresdefault.jpg",
+    link: "https://www.youtube.com/watch?v=35Tjrg4KJYc",
   },
-  {
-    title: "Create Multiple Income Streams",
-    desc: "Discover practical ways to diversify your income sources.",
-    img: "https://img.youtube.com/vi/5zXAlx4J4wQ/hqdefault.jpg",
-    link: "https://www.youtube.com/watch?v=5zXAlx4J4wQ",
-  },
-];
+]);
 
-const displayedVideos = ref([...videos, ...videos]); // duplicate for infinite loop
+// Duplicate videos for smooth infinite effect
+const displayedVideos = ref([...videos.value, ...videos.value]);
+
 let interval;
 
 const scrollRight = () => {
@@ -132,7 +128,7 @@ const scrollLeft = () => {
 };
 
 const startAutoscroll = () => {
-  interval = setInterval(scrollRight, 3000);
+  interval = setInterval(scrollRight, 3500);
 };
 
 const pauseAutoscroll = () => clearInterval(interval);
@@ -143,7 +139,7 @@ onBeforeUnmount(pauseAutoscroll);
 </script>
 
 <style>
-/* Hide scrollbar on mobile for a cleaner look */
+/* Hide scrollbar for a clean horizontal scroll */
 .scrollbar-hide::-webkit-scrollbar {
   display: none;
 }
