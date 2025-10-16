@@ -4,7 +4,8 @@
       Toujours hésitant ? <br />
       <span class="text-blue-500">Découvrez nos contenus gratuits</span>
     </h2>
-    <p class="max-w-3xl mx-auto text-gray-500 mb-12">
+
+    <p class="max-w-3xl mx-auto text-gray-500 mb-12 px-4">
       Nos mini formations gratuites vous aideront à développer des fondations
       solides dans les domaines du développement personnel, du business en
       ligne, de l’entrepreneuriat et de l’investissement.
@@ -12,23 +13,25 @@
 
     <div class="relative w-full max-w-6xl mx-auto">
       <div
-        class="flex gap-6 overflow-hidden"
+        class="flex gap-4 sm:gap-6 overflow-x-auto scrollbar-hide scroll-smooth px-4 sm:px-0"
         @mouseenter="pauseAutoscroll"
         @mouseleave="resumeAutoscroll"
       >
         <div
           v-for="(video, index) in displayedVideos"
           :key="index"
-          class="bg-white shadow-md rounded-2xl flex flex-col justify-between w-72 flex-shrink-0 transition-transform duration-500"
+          class="bg-white shadow-md rounded-2xl flex flex-col justify-between flex-shrink-0 w-64 sm:w-72 md:w-80 transition-transform duration-500"
         >
           <div>
             <img
               :src="video.img"
               alt="Video thumbnail"
-              class="rounded-t-2xl w-full h-44 object-cover"
+              class="rounded-t-2xl w-full h-40 sm:h-44 object-cover"
             />
-            <div class="p-4 flex flex-col h-[220px]">
-              <h3 class="text-lg font-semibold mb-2">{{ video.title }}</h3>
+            <div class="p-4 flex flex-col h-[200px] sm:h-[220px]">
+              <h3 class="text-base sm:text-lg font-semibold mb-2">
+                {{ video.title }}
+              </h3>
               <p class="text-gray-500 text-sm flex-grow">{{ video.desc }}</p>
             </div>
           </div>
@@ -36,7 +39,7 @@
             <a
               :href="video.link"
               target="_blank"
-              class="bg-blue-500 text-white px-4 py-2 rounded-xl hover:bg-blue-600 inline-block w-full text-center"
+              class="bg-blue-500 text-white px-4 py-2 rounded-xl hover:bg-blue-600 inline-block w-full text-center text-sm sm:text-base"
             >
               Watch on YouTube
             </a>
@@ -44,15 +47,16 @@
         </div>
       </div>
 
+      <!-- Navigation Buttons (hidden on mobile) -->
       <button
         @click="scrollLeft"
-        class="absolute top-1/2 left-0 transform -translate-y-1/2 bg-white rounded-full shadow p-2 hover:bg-blue-100"
+        class="hidden sm:flex absolute top-1/2 left-0 transform -translate-y-1/2 bg-white rounded-full shadow p-2 hover:bg-blue-100"
       >
         ◀
       </button>
       <button
         @click="scrollRight"
-        class="absolute top-1/2 right-0 transform -translate-y-1/2 bg-white rounded-full shadow p-2 hover:bg-blue-100"
+        class="hidden sm:flex absolute top-1/2 right-0 transform -translate-y-1/2 bg-white rounded-full shadow p-2 hover:bg-blue-100"
       >
         ▶
       </button>
@@ -137,3 +141,14 @@ const resumeAutoscroll = () => startAutoscroll();
 onMounted(startAutoscroll);
 onBeforeUnmount(pauseAutoscroll);
 </script>
+
+<style>
+/* Hide scrollbar on mobile for a cleaner look */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+</style>
