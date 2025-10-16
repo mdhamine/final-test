@@ -1,5 +1,5 @@
 <template>
-  <section class="bg-[#f7faff] py-16 text-center">
+  <section class="bg-[#f7faff] py-16 text-center overflow-hidden">
     <h2 class="text-3xl md:text-4xl font-bold mb-6 leading-snug">
       Toujours hésitant ? <br />
       <span class="text-blue-500">Découvrez nos contenus gratuits</span>
@@ -11,16 +11,12 @@
       algériens ambitieux.
     </p>
 
-    <div class="relative w-full max-w-6xl mx-auto">
-      <div
-        class="flex gap-4 sm:gap-6 overflow-x-auto scrollbar-hide scroll-smooth px-4 sm:px-0"
-        @mouseenter="pauseAutoscroll"
-        @mouseleave="resumeAutoscroll"
-      >
+    <div class="slider-container relative w-full max-w-7xl mx-auto">
+      <div class="slider-track flex gap-6 sm:gap-8">
         <div
-          v-for="(video, index) in displayedVideos"
+          v-for="(video, index) in [...videos, ...videos]" 
           :key="index"
-          class="bg-white shadow-md rounded-2xl flex flex-col justify-between flex-shrink-0 w-64 sm:w-72 md:w-80 transition-transform duration-500"
+          class="card bg-white rounded-2xl shadow-md flex flex-col justify-between w-64 sm:w-72 md:w-80 flex-shrink-0 transition-all duration-300 hover:scale-105 hover:shadow-xl"
         >
           <div>
             <img
@@ -46,28 +42,12 @@
           </div>
         </div>
       </div>
-
-      <!-- Navigation buttons (hidden on mobile) -->
-      <button
-        @click="scrollLeft"
-        class="hidden sm:flex absolute top-1/2 left-0 transform -translate-y-1/2 bg-white rounded-full shadow p-2 hover:bg-blue-100"
-      >
-        ◀
-      </button>
-      <button
-        @click="scrollRight"
-        class="hidden sm:flex absolute top-1/2 right-0 transform -translate-y-1/2 bg-white rounded-full shadow p-2 hover:bg-blue-100"
-      >
-        ▶
-      </button>
     </div>
   </section>
 </template>
 
 <script setup>
-import { ref, onMounted, onBeforeUnmount } from "vue";
-
-const videos = ref([
+const videos = [
   {
     title: "FluentlyTalk Ep 01 — Omar Rahmoun",
     desc: "Why Omar wakes up at 4 AM to chase his dreams — a talk about discipline and mindset.",
@@ -110,41 +90,28 @@ const videos = ref([
     thumbnail: "https://i.ytimg.com/vi/35Tjrg4KJYc/maxresdefault.jpg",
     link: "https://www.youtube.com/watch?v=35Tjrg4KJYc",
   },
-]);
-
-// Duplicate videos for smooth infinite effect
-const displayedVideos = ref([...videos.value, ...videos.value]);
-
-let interval;
-
-const scrollRight = () => {
-  const first = displayedVideos.value.shift();
-  displayedVideos.value.push(first);
-};
-
-const scrollLeft = () => {
-  const last = displayedVideos.value.pop();
-  displayedVideos.value.unshift(last);
-};
-
-const startAutoscroll = () => {
-  interval = setInterval(scrollRight, 3500);
-};
-
-const pauseAutoscroll = () => clearInterval(interval);
-const resumeAutoscroll = () => startAutoscroll();
-
-onMounted(startAutoscroll);
-onBeforeUnmount(pauseAutoscroll);
+];
 </script>
 
-<style>
-/* Hide scrollbar for a clean horizontal scroll */
-.scrollbar-hide::-webkit-scrollbar {
-  display: none;
+<style scoped>
+.slider-container {
+  overflow: hidden;
 }
-.scrollbar-hide {
-  -ms-overflow-style: none;
-  scrollbar-width: none;
+
+.slider-track {
+  animation: scroll 35s linear infinite;
+}
+
+@keyframes scroll {
+  0% {
+    transform: translateX(0);
+  }
+  100% {
+    transform: translateX(-50%);
+  }
+}
+
+.card {
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
 }
 </style>
