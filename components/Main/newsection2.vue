@@ -1,5 +1,5 @@
 <template>
-  <section class="bg-[#f7faff] py-16 text-center">
+  <section class="bg-[#f7faff] py-16 text-center overflow-hidden">
     <h2 class="text-3xl md:text-4xl font-bold mb-6 leading-snug">
       Toujours hésitant ? <br />
       <span class="text-blue-500">Découvrez nos contenus gratuits</span>
@@ -9,20 +9,22 @@
       développement personnel, du business en ligne, de l’entrepreneuriat et de l’investissement.
     </p>
 
-    <div class="relative w-full max-w-6xl mx-auto overflow-hidden">
+    <div class="relative max-w-6xl mx-auto">
+      <!-- Slider track -->
       <div
-        class="flex gap-6 transition-transform duration-700 ease-in-out"
-        :style="{ transform: `translateX(-${currentIndex * (cardWidth + gap)}px)` }"
+        ref="track"
+        class="flex transition-transform duration-700 ease-in-out"
+        :style="{ transform: `translateX(-${currentTranslate}px)` }"
       >
         <div
-          v-for="(video, index) in videos"
+          v-for="(video, index) in visibleVideos"
           :key="index"
-          class="bg-white shadow-md rounded-2xl flex flex-col justify-between w-72 flex-shrink-0"
+          class="bg-white rounded-2xl shadow-md flex flex-col justify-between w-72 mx-3 flex-shrink-0"
         >
           <div>
             <img
-              :src="video.img"
-              alt="Video thumbnail"
+              :src="video.thumbnail"
+              :alt="video.title"
               class="rounded-t-2xl w-full h-44 object-cover"
             />
             <div class="p-4 flex flex-col h-[220px]">
@@ -42,18 +44,17 @@
         </div>
       </div>
 
-      <!-- Left arrow -->
+      <!-- Navigation buttons -->
       <button
-        @click="scrollLeft"
-        class="absolute top-1/2 left-0 transform -translate-y-1/2 bg-white rounded-full shadow p-2 hover:bg-blue-100"
+        @click="moveLeft"
+        class="absolute top-1/2 -left-5 transform -translate-y-1/2 bg-white rounded-full shadow p-3 hover:bg-blue-100"
       >
         ◀
       </button>
 
-      <!-- Right arrow -->
       <button
-        @click="scrollRight"
-        class="absolute top-1/2 right-0 transform -translate-y-1/2 bg-white rounded-full shadow p-2 hover:bg-blue-100"
+        @click="moveRight"
+        class="absolute top-1/2 -right-5 transform -translate-y-1/2 bg-white rounded-full shadow p-3 hover:bg-blue-100"
       >
         ▶
       </button>
@@ -62,69 +63,78 @@
 </template>
 
 <script setup>
-import { ref } from 'vue'
+import { ref, computed } from "vue";
 
 const videos = [
   {
-    title: 'How to Start Your Business',
-    desc: 'Learn how to launch your online business effectively with simple steps.',
-    img: 'https://img.youtube.com/vi/Hw2eCvD2HOM/hqdefault.jpg',
-    link: 'https://www.youtube.com/watch?v=Hw2eCvD2HOM',
+    title: "FluentlyTalk Ep 01 — Omar Rahmoun",
+    desc: "Why Omar wakes up at 4 AM to chase his dreams — a talk about discipline and mindset.",
+    thumbnail: "https://i.ytimg.com/vi/BaUdOKGuA40/maxresdefault.jpg",
+    link: "https://www.youtube.com/watch?v=BaUdOKGuA40",
   },
   {
-    title: 'Build Self Discipline',
-    desc: 'Master your habits to stay consistent and reach your goals.',
-    img: 'https://img.youtube.com/vi/xp2Pdm2DqTQ/hqdefault.jpg',
-    link: 'https://www.youtube.com/watch?v=xp2Pdm2DqTQ',
+    title: "FluentlyTalk Ep 02 — Oussama Hamouche",
+    desc: "An Algerian millionaire shares how he built his business empire from the ground up.",
+    thumbnail: "https://i.ytimg.com/vi/X8OqdwWqWso/maxresdefault.jpg",
+    link: "https://www.youtube.com/watch?v=X8OqdwWqWso",
   },
   {
-    title: 'Invest Smartly',
-    desc: 'Understand the basics of investing and managing your money wisely.',
-    img: 'https://img.youtube.com/vi/UKkzvY9P-nw/hqdefault.jpg',
-    link: 'https://www.youtube.com/watch?v=UKkzvY9P-nw',
+    title: "FluentlyTalk Ep 03 — Idris Smati",
+    desc: "Why Idris left university to work in Qatar and how that decision changed his life.",
+    thumbnail: "https://i.ytimg.com/vi/1T68O4Jzfv4/maxresdefault.jpg",
+    link: "https://www.youtube.com/watch?v=1T68O4Jzfv4",
   },
   {
-    title: 'Time Management',
-    desc: 'Practical tips to manage your day and boost productivity.',
-    img: 'https://img.youtube.com/vi/nWbZjq4gC7A/hqdefault.jpg',
-    link: 'https://www.youtube.com/watch?v=nWbZjq4gC7A',
+    title: "FluentlyTalk Ep 04 — Yassine Abdeldjebbar",
+    desc: "From Algeria to the U.S.: Yassine’s inspiring journey to becoming a researcher abroad.",
+    thumbnail: "https://i.ytimg.com/vi/sSCa9LimxzQ/maxresdefault.jpg",
+    link: "https://www.youtube.com/watch?v=sSCa9LimxzQ",
   },
   {
-    title: 'Overcome Fear of Failure',
-    desc: 'Shift your mindset and see failure as a learning opportunity.',
-    img: 'https://img.youtube.com/vi/0deYETmQw08/hqdefault.jpg',
-    link: 'https://www.youtube.com/watch?v=0deYETmQw08',
+    title: "FluentlyTalk Ep 05 — ROC DZ",
+    desc: "Is it really possible to start from zero in Algeria? ROC DZ gives his raw perspective.",
+    thumbnail: "https://i.ytimg.com/vi/iv66rGFWMmI/maxresdefault.jpg",
+    link: "https://www.youtube.com/watch?v=iv66rGFWMmI",
   },
   {
-    title: 'Personal Branding 101',
-    desc: 'Learn how to build a strong personal brand that stands out.',
-    img: 'https://img.youtube.com/vi/Upbm-9xsrnQ/hqdefault.jpg',
-    link: 'https://www.youtube.com/watch?v=Upbm-9xsrnQ',
+    title: "FluentlyTalk Ep 06 — Belkadi Manel",
+    desc: "How Manel scored 18+ in the Algerian Baccalaureate — strategies for excellence.",
+    thumbnail: "https://i.ytimg.com/vi/8asdkghlcpA/maxresdefault.jpg",
+    link: "https://www.youtube.com/watch?v=8asdkghlcpA",
   },
   {
-    title: 'Entrepreneur Mindset',
-    desc: 'Develop the right mentality to grow and adapt as an entrepreneur.',
-    img: 'https://img.youtube.com/vi/YRkW0v7oBtY/hqdefault.jpg',
-    link: 'https://www.youtube.com/watch?v=YRkW0v7oBtY',
+    title: "FluentlyTalk Ep 07 — Ladjali Raouf",
+    desc: "Has medicine become a business in Algeria? Raouf shares his honest opinion.",
+    thumbnail: "https://i.ytimg.com/vi/35Tjrg4KJYc/maxresdefault.jpg",
+    link: "https://www.youtube.com/watch?v=35Tjrg4KJYc",
   },
-  {
-    title: 'Create Multiple Income Streams',
-    desc: 'Discover practical ways to diversify your income sources.',
-    img: 'https://img.youtube.com/vi/5zXAlx4J4wQ/hqdefault.jpg',
-    link: 'https://www.youtube.com/watch?v=5zXAlx4J4wQ',
-  },
-]
+];
 
-const currentIndex = ref(0)
-const visibleCards = 3 // number of cards visible at once
-const cardWidth = 288 // 18rem = 72 * 4px
-const gap = 24 // Tailwind gap-6 = 1.5rem = 24px
+// CONFIG
+const cardWidth = 288; // 18rem
+const gap = 24; // px (gap-6)
+const moveDistance = cardWidth + gap;
 
-const scrollRight = () => {
-  currentIndex.value = (currentIndex.value + 1) % videos.length
-}
+// Track current translate position
+const currentTranslate = ref(0);
 
-const scrollLeft = () => {
-  currentIndex.value = (currentIndex.value - 1 + videos.length) % videos.length
-}
+// Create an infinite list by duplicating videos before and after
+const visibleVideos = computed(() => [...videos, ...videos, ...videos]);
+
+// Movement functions
+const moveRight = () => {
+  currentTranslate.value += moveDistance;
+  const maxTranslate = moveDistance * videos.length;
+  if (currentTranslate.value >= maxTranslate) {
+    currentTranslate.value = 0; // reset smoothly to start
+  }
+};
+
+const moveLeft = () => {
+  currentTranslate.value -= moveDistance;
+  const maxTranslate = moveDistance * videos.length;
+  if (currentTranslate.value < 0) {
+    currentTranslate.value = maxTranslate - moveDistance;
+  }
+};
 </script>
