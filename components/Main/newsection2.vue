@@ -9,25 +9,25 @@
       développement personnel, du business en ligne, de l’entrepreneuriat et de l’investissement.
     </p>
 
-    <div class="relative max-w-6xl mx-auto">
-      <!-- Slider track -->
+    <div class="relative max-w-7xl mx-auto px-8">
+      <!-- Track -->
       <div
         ref="track"
         class="flex transition-transform duration-700 ease-in-out"
-        :style="{ transform: `translateX(-${currentTranslate}px)` }"
+        :style="{ transform: `translateX(-${translateX}px)` }"
       >
         <div
-          v-for="(video, index) in visibleVideos"
+          v-for="(video, index) in loopedVideos"
           :key="index"
-          class="bg-white rounded-2xl shadow-md flex flex-col justify-between w-72 mx-3 flex-shrink-0"
+          class="bg-white rounded-2xl shadow-md flex flex-col justify-between w-80 mx-3 flex-shrink-0"
         >
           <div>
             <img
               :src="video.thumbnail"
               :alt="video.title"
-              class="rounded-t-2xl w-full h-44 object-cover"
+              class="rounded-t-2xl w-full h-48 object-cover"
             />
-            <div class="p-4 flex flex-col h-[220px]">
+            <div class="p-4 flex flex-col h-[230px]">
               <h3 class="text-lg font-semibold mb-2">{{ video.title }}</h3>
               <p class="text-gray-500 text-sm flex-grow">{{ video.desc }}</p>
             </div>
@@ -44,17 +44,17 @@
         </div>
       </div>
 
-      <!-- Navigation buttons -->
+      <!-- Navigation -->
       <button
-        @click="moveLeft"
-        class="absolute top-1/2 -left-5 transform -translate-y-1/2 bg-white rounded-full shadow p-3 hover:bg-blue-100"
+        @click="slideLeft"
+        class="absolute top-1/2 -left-2 transform -translate-y-1/2 bg-white rounded-full shadow p-3 hover:bg-blue-100 z-10"
       >
         ◀
       </button>
 
       <button
-        @click="moveRight"
-        class="absolute top-1/2 -right-5 transform -translate-y-1/2 bg-white rounded-full shadow p-3 hover:bg-blue-100"
+        @click="slideRight"
+        class="absolute top-1/2 -right-2 transform -translate-y-1/2 bg-white rounded-full shadow p-3 hover:bg-blue-100 z-10"
       >
         ▶
       </button>
@@ -110,31 +110,30 @@ const videos = [
   },
 ];
 
-// CONFIG
-const cardWidth = 288; // 18rem
-const gap = 24; // px (gap-6)
-const moveDistance = cardWidth + gap;
+// Duplicate list for seamless effect
+const loopedVideos = computed(() => [...videos, ...videos, ...videos]);
 
-// Track current translate position
-const currentTranslate = ref(0);
+// Each card's full width including margin (px)
+const cardWidth = 320; // w-80 + margins
+const gap = 24;
+const step = cardWidth + gap;
 
-// Create an infinite list by duplicating videos before and after
-const visibleVideos = computed(() => [...videos, ...videos, ...videos]);
+// Track translation
+const translateX = ref(0);
 
-// Movement functions
-const moveRight = () => {
-  currentTranslate.value += moveDistance;
-  const maxTranslate = moveDistance * videos.length;
-  if (currentTranslate.value >= maxTranslate) {
-    currentTranslate.value = 0; // reset smoothly to start
+function slideRight() {
+  translateX.value += step;
+  const totalWidth = step * videos.length;
+  if (translateX.value >= totalWidth) {
+    translateX.value = 0;
   }
-};
+}
 
-const moveLeft = () => {
-  currentTranslate.value -= moveDistance;
-  const maxTranslate = moveDistance * videos.length;
-  if (currentTranslate.value < 0) {
-    currentTranslate.value = maxTranslate - moveDistance;
+function slideLeft() {
+  translateX.value -= step;
+  const totalWidth = step * videos.length;
+  if (translateX.value < 0) {
+    translateX.value = totalWidth - step;
   }
-};
+}
 </script>
