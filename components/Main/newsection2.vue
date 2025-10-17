@@ -10,16 +10,19 @@
     </p>
 
     <div class="relative max-w-7xl mx-auto px-8">
-      <!-- Track -->
+      <!-- Slider Track -->
       <div
         ref="track"
         class="flex transition-transform duration-700 ease-in-out"
         :style="{ transform: `translateX(-${translateX}px)` }"
       >
+        <!-- Left Padding -->
+        <div class="shrink-0 w-8"></div>
+
         <div
           v-for="(video, index) in loopedVideos"
           :key="index"
-          class="bg-white rounded-2xl shadow-md flex flex-col justify-between w-80 mx-3 flex-shrink-0"
+          class="bg-white rounded-2xl shadow-md flex flex-col justify-between w-80 mx-3 flex-shrink-0 transition-all duration-300 border border-transparent hover:border-blue-500 hover:shadow-[0_0_15px_rgba(37,99,235,0.4)]"
         >
           <div>
             <img
@@ -36,25 +39,28 @@
             <a
               :href="video.link"
               target="_blank"
-              class="bg-blue-500 text-white px-4 py-2 rounded-xl hover:bg-blue-600 inline-block w-full text-center"
+              class="bg-blue-500 text-white px-4 py-2 rounded-xl hover:bg-blue-600 inline-block w-full text-center transition"
             >
               Watch on YouTube
             </a>
           </div>
         </div>
+
+        <!-- Right Padding -->
+        <div class="shrink-0 w-8"></div>
       </div>
 
-      <!-- Navigation -->
+      <!-- Navigation Buttons -->
       <button
         @click="slideLeft"
-        class="absolute top-1/2 -left-2 transform -translate-y-1/2 bg-white rounded-full shadow p-3 hover:bg-blue-100 z-10"
+        class="absolute top-1/2 -left-2 transform -translate-y-1/2 bg-white rounded-full shadow p-3 hover:bg-blue-100 z-10 transition"
       >
         ◀
       </button>
 
       <button
         @click="slideRight"
-        class="absolute top-1/2 -right-2 transform -translate-y-1/2 bg-white rounded-full shadow p-3 hover:bg-blue-100 z-10"
+        class="absolute top-1/2 -right-2 transform -translate-y-1/2 bg-white rounded-full shadow p-3 hover:bg-blue-100 z-10 transition"
       >
         ▶
       </button>
@@ -110,30 +116,24 @@ const videos = [
   },
 ];
 
-// Duplicate list for seamless effect
+// duplicate the videos to make infinite looping seamless
 const loopedVideos = computed(() => [...videos, ...videos, ...videos]);
 
-// Each card's full width including margin (px)
-const cardWidth = 320; // w-80 + margins
-const gap = 24;
+const cardWidth = 320; // px
+const gap = 24; // mx-3 → 12px each side
 const step = cardWidth + gap;
 
-// Track translation
 const translateX = ref(0);
 
 function slideRight() {
   translateX.value += step;
   const totalWidth = step * videos.length;
-  if (translateX.value >= totalWidth) {
-    translateX.value = 0;
-  }
+  if (translateX.value >= totalWidth) translateX.value = 0;
 }
 
 function slideLeft() {
   translateX.value -= step;
   const totalWidth = step * videos.length;
-  if (translateX.value < 0) {
-    translateX.value = totalWidth - step;
-  }
+  if (translateX.value < 0) translateX.value = totalWidth - step;
 }
 </script>
