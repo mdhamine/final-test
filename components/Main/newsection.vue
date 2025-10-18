@@ -53,10 +53,6 @@ import { ref, computed } from "vue";
 
 const images = ref([
 
-  "https://i.ibb.co/0pXzdydS/IMG-0279.jpg",
-
-  "https://i.ibb.co/Fb8LzD95/IMG-0277.jpg",
-  "https://i.ibb.co/Hyk1B6L/IMG-0276.jpg",
   "https://i.ibb.co/bjXXfyFk/IMG-0275.jpg",
   "https://i.ibb.co/BHKRjfyz/IMG-0274.jpg",
   "https://i.ibb.co/PzZ52YnY/IMG-0268.jpg",
