@@ -66,12 +66,11 @@ const images = ref([
     "https://i.ibb.co/p7XcYXk/IMG-0291.jpg",
   "https://i.ibb.co/ZzyX9Cr1/IMG-0290.jpg",
   "https://i.ibb.co/pvxQWtK2/IMG-0289.jpg",
-  "https://i.ibb.co/4cPwbxN/IMG-0288.jpg",
+
 
   "https://i.ibb.co/B2LrphXh/IMG-0286.jpg",
 
-  "https://i.ibb.co/gLJqGD7g/IMG-0284.jpg",
-  "https://i.ibb.co/Nng2X6DL/IMG-0283.jpg"
+  "https://i.ibb.co/gLJqGD7g/IMG-0284.jpg"
 ]);
 
 const showAll = ref(false);
