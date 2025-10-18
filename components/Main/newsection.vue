@@ -67,9 +67,9 @@ const images = ref([
   "https://i.ibb.co/ZzyX9Cr1/IMG-0290.jpg",
   "https://i.ibb.co/pvxQWtK2/IMG-0289.jpg",
   "https://i.ibb.co/4cPwbxN/IMG-0288.jpg",
-  "https://i.ibb.co/m5CzJB9x/IMG-0287.jpg",
+
   "https://i.ibb.co/B2LrphXh/IMG-0286.jpg",
-  "https://i.ibb.co/My2mxqFG/IMG-0285.jpg",
+
   "https://i.ibb.co/gLJqGD7g/IMG-0284.jpg",
   "https://i.ibb.co/Nng2X6DL/IMG-0283.jpg"
 ]);
