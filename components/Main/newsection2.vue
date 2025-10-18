@@ -114,6 +114,12 @@ const videos = [
     thumbnail: "https://i.ytimg.com/vi/35Tjrg4KJYc/maxresdefault.jpg",
     link: "https://www.youtube.com/watch?v=35Tjrg4KJYc",
   },
+  {
+    title: "FluentlyTalk Ep 08 - Ahmed Bouzid",
+    desc: " founder of Printazix, a successful print-on-demand platform",
+    thumbnail: "https://i.ibb.co/b5tqM84V/EP-4-Version-2-1.png",
+    link: "https://youtu.be/2uq8LwmDQ6Q?si=hSERFqvB5nrI8g6c",
+  },
 ];
 
 // duplicate the videos to make infinite looping seamless
