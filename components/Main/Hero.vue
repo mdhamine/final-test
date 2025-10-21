@@ -16,6 +16,7 @@
             {{ $t("desc") }}
           </p>
 
+          ```
           <div
             class="grid md:grid-cols-2 grid-cols-1 gap-x-8 gap-y-2 mb-6 md:justify-items-start justify-items-center xl:pr-24 md:px-0 px-12 mx-auto lg:mx-auto"
           >
@@ -51,7 +52,43 @@
     </div>
 
     <!-- Trusted By Logos Section -->
-    <TrustedByLogos />
+    <section class="trusted-by">
+      <div class="container">
+        <h2 class="title">They trust us</h2>
+
+        <ul class="logo-grid" role="list">
+          <li v-for="(c, i) in companies" :key="c.id || i" class="logo-item">
+            <a
+              v-if="c.url"
+              :href="c.url"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="logo-link"
+              :title="c.name"
+            >
+              <img
+                class="logo"
+                :src="c.logo"
+                :alt="c.name + ' logo'"
+                loading="lazy"
+                width="180"
+                height="80"
+              />
+            </a>
+            <div v-else class="logo-link">
+              <img
+                class="logo"
+                :src="c.logo"
+                :alt="c.name + ' logo'"
+                loading="lazy"
+                width="180"
+                height="80"
+              />
+            </div>
+          </li>
+        </ul>
+      </div>
+    </section>
 
     <div class="relative flex-col hidden 2xl:flex -mt-52">
       <hr
@@ -80,15 +117,54 @@
       </div>
     </div>
   </div>
+  ```
 </template>
 
 <script>
 import Player from "@vimeo/player";
-import TrustedByLogos from "./TrustedByLogos.vue";
 
 export default {
-  components: {
-    TrustedByLogos,
+  data() {
+    return {
+      companies: [
+        {
+          id: 1,
+          name: "Acme Co",
+          logo: "https://via.placeholder.com/180x80?text=Acme",
+          url: "#",
+        },
+        {
+          id: 2,
+          name: "Globex",
+          logo: "https://via.placeholder.com/180x80?text=Globex",
+          url: "#",
+        },
+        {
+          id: 3,
+          name: "Initech",
+          logo: "https://via.placeholder.com/180x80?text=Initech",
+          url: "#",
+        },
+        {
+          id: 4,
+          name: "Umbrella",
+          logo: "https://via.placeholder.com/180x80?text=Umbrella",
+          url: "#",
+        },
+        {
+          id: 5,
+          name: "Wonka",
+          logo: "https://via.placeholder.com/180x80?text=Wonka",
+          url: "#",
+        },
+        {
+          id: 6,
+          name: "Stark",
+          logo: "https://via.placeholder.com/180x80?text=Stark",
+          url: "#",
+        },
+      ],
+    };
   },
   mounted() {
     this.example = new Player(this.$refs.example);
@@ -105,7 +181,70 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+.container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem 1rem;
+  text-align: center;
+}
+
+.title {
+  font-size: 1.5rem;
+  margin-bottom: 0.25rem;
+  font-weight: 700;
+  color: #000032;
+}
+
+.logo-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1rem;
+  list-style: none;
+  padding: 0;
+  margin: 1.25rem auto 0;
+  align-items: center;
+}
+
+@media (min-width: 640px) {
+  .logo-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .logo-grid {
+    grid-template-columns: repeat(6, 1fr);
+  }
+}
+
+.logo-item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+}
+
+.logo-link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 56px;
+}
+
+.logo {
+  max-width: 100%;
+  max-height: 64px;
+  object-fit: contain;
+  transition: transform 180ms ease, filter 180ms ease;
+}
+
+.logo:hover {
+  transform: translateY(-4px) scale(1.02);
+}
+
 .background {
   position: absolute;
   top: 0;
@@ -121,11 +260,10 @@ export default {
 }
 
 @keyframes animateBackground {
-  0% {
-    background-position: 99% 50%, 1% 10%;
-    opacity: 1;
-  }
-  25% {
+  0%,
+  25%,
+  75%,
+  100% {
     background-position: 99% 50%, 1% 10%;
     opacity: 1;
   }
@@ -133,84 +271,9 @@ export default {
     background-position: 80% 40%, 50% 30%;
     opacity: 0.5;
   }
-  75% {
-    background-position: 99% 50%, 1% 10%;
-    opacity: 1;
-  }
-  100% {
-    background-position: 99% 50%, 1% 10%;
-    opacity: 1;
-  }
 }
 
 .glow {
-  -webkit-box-shadow: 0px 0px 116px 2px rgba(33, 213, 249, 1);
-  -moz-box-shadow: 0px 0px 116px 2px rgba(33, 213, 249, 1);
   box-shadow: 0px 0px 116px 2px rgba(33, 213, 249, 1);
-}
-
-.btn-hover {
-  font-size: 1.125rem;
-  line-height: 1.75rem;
-  font-weight: 600;
-  color: #fff;
-  cursor: pointer;
-  height: 55px;
-  text-align: center;
-  border: none;
-  background-size: 300% 100%;
-  border-radius: 50px;
-  transition: all 0.4s ease-in-out;
-}
-
-.btn-hover:hover {
-  background-position: 99% 0;
-  transition: all 0.4s ease-in-out;
-}
-
-.btn-hover:focus {
-  outline: none;
-}
-
-.btn-hover.color-2 {
-  background-image: linear-gradient(
-    to right,
-    #25aae1,
-    #4481eb,
-    #21d5f9,
-    #3f86ed
-  );
-  box-shadow: 0 4px 15px 0 rgba(65, 132, 234, 0.75);
-}
-
-.thin-section {
-  width: 100%;
-  background-image: radial-gradient(
-    circle,
-    #21d5f9,
-    #21d5f9 33%,
-    rgba(0, 107, 255, 0)
-  );
-  padding-top: 1px;
-  padding-bottom: 1px;
-  overflow: hidden;
-}
-
-.thin-section.not-as-thin {
-  background-image: none;
-  padding-top: 35px;
-  padding-bottom: 35px;
-}
-
-.thin-section.no-space {
-  width: 100%;
-  max-width: 100%;
-  display: flex;
-}
-
-.thin-section.gradient-bar {
-  width: 100%;
-  max-width: 100%;
-  align-items: center;
 }
 </style>
